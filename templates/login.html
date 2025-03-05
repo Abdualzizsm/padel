@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}تسجيل الدخول - بادل ليج{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">تسجيل الدخول</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" name="username" class="form-control" placeholder="أدخل اسم المستخدم" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">كلمة المرور</label>
+                        <input type="password" name="password" class="form-control" placeholder="أدخل كلمة المرور" required>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary w-100">تسجيل الدخول</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                ليس لديك حساب؟ <a href="{{ url_for('register') }}">إنشاء حساب جديد</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,177 @@
+{% extends "base.html" %}
+
+{% block title %}جدول الترتيب - {{ tournament.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    <a href="{{ url_for('tournament_detail', tournament_id=tournament.id) }}">{{ tournament.name }}</a>
+                </div>
+                <h2 class="page-title">
+                    جدول الترتيب
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="page-body">
+    <div class="container-xl">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">ترتيب الفرق</h3>
+            </div>
+            <div class="card-body">
+                {% if teams %}
+                <div class="table-responsive">
+                    <table class="table table-vcenter table-hover">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>الفريق</th>
+                                <th>لعب</th>
+                                <th>فاز</th>
+                                <th>تعادل</th>
+                                <th>خسر</th>
+                                <th>له</th>
+                                <th>عليه</th>
+                                <th>فارق</th>
+                                <th>نقاط</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for team_stats in standings %}
+                            <tr>
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                    <a href="{{ url_for('team_detail', team_id=team_stats.team.id) }}" class="text-reset">
+                                        <span class="avatar avatar-xs me-2" style="background-image: url({{ team_stats.team.logo or 'https://via.placeholder.com/32?text=' + team_stats.team.name[0] }})">{{ team_stats.team.name[0] }}</span>
+                                        {{ team_stats.team.name }}
+                                    </a>
+                                </td>
+                                <td>{{ team_stats.played }}</td>
+                                <td>{{ team_stats.wins }}</td>
+                                <td>{{ team_stats.draws }}</td>
+                                <td>{{ team_stats.losses }}</td>
+                                <td>{{ team_stats.goals_for }}</td>
+                                <td>{{ team_stats.goals_against }}</td>
+                                <td>{{ team_stats.goal_difference }}</td>
+                                <td class="fw-bold">{{ team_stats.points }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty">
+                    <div class="empty-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trophy" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 21l8 0" /><path d="M12 17l0 4" /><path d="M7 4l10 0" /><path d="M17 4v8a5 5 0 0 1 -10 0v-8" /><path d="M5 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /></svg>
+                    </div>
+                    <p class="empty-title">لا توجد بيانات</p>
+                    <p class="empty-subtitle text-muted">
+                        لا توجد مباريات منتهية بعد في هذا الدوري
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3 class="card-title">إحصائيات الدوري</h3>
+            </div>
+            <div class="card-body">
+                <div class="row row-cards">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-sm">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="bg-primary text-white avatar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-ball-football" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M12 7l4.76 3.45l-1.76 5.55h-6l-1.76 -5.55z" /><path d="M12 7v-4m3 13l2.5 3m-.74 -8.55l3.74 -1.45m-11.44 7.05l-2.56 2.95m.74 -8.55l-3.74 -1.45" /></svg>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">
+                                            {{ stats.total_matches }} مباراة
+                                        </div>
+                                        <div class="text-muted">
+                                            إجمالي المباريات
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-sm">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="bg-green text-white avatar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-goal" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-8 0a8 8 0 1 0 16 0a8 8 0 1 0 -16 0" /><path d="M12 12m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M12 2v4" /><path d="M12 18v4" /><path d="M2 12h4" /><path d="M18 12h4" /></svg>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">
+                                            {{ stats.total_goals }} هدف
+                                        </div>
+                                        <div class="text-muted">
+                                            إجمالي الأهداف
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-sm">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="bg-yellow text-white avatar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">
+                                            {{ stats.total_teams }} فريق
+                                        </div>
+                                        <div class="text-muted">
+                                            عدد الفرق المشاركة
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card card-sm">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-auto">
+                                        <span class="bg-azure text-white avatar">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-calendar-time" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M11.795 21h-6.795a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v4" /><path d="M18 18m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M15 3v4" /><path d="M7 3v4" /><path d="M3 11h16" /><path d="M18 16.496v1.504l1 1" /></svg>
+                                        </span>
+                                    </div>
+                                    <div class="col">
+                                        <div class="font-weight-medium">
+                                            {{ stats.remaining_matches }} مباراة
+                                        </div>
+                                        <div class="text-muted">
+                                            المباريات المتبقية
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

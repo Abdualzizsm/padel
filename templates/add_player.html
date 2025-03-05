@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}إضافة لاعب - {{ team.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    <a href="{{ url_for('team_detail', team_id=team.id) }}">{{ team.name }}</a>
+                </div>
+                <h2 class="page-title">
+                    إضافة لاعب جديد
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label required">اسم اللاعب</label>
+                        <input type="text" name="name" class="form-control" placeholder="أدخل اسم اللاعب" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">رقم الهاتف</label>
+                        <input type="tel" name="phone" class="form-control" placeholder="أدخل رقم الهاتف">
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary">إضافة اللاعب</button>
+                        <a href="{{ url_for('team_detail', team_id=team.id) }}" class="btn btn-outline-secondary ms-2">إلغاء</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

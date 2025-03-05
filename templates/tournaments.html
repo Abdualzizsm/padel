@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}الدوريات - بادل ليج{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    الدوريات
+                </h2>
+            </div>
+            {% if current_user.is_authenticated %}
+            <div class="col-auto ms-auto d-print-none">
+                <a href="{{ url_for('create_tournament') }}" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                    إنشاء دوري جديد
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row row-cards">
+    {% if tournaments %}
+    {% for tournament in tournaments %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card">
+            <div class="card-status-top bg-{{ 'success' if tournament.status == 'جاري' else 'primary' if tournament.status == 'قادم' else 'secondary' }}"></div>
+            <div class="card-body">
+                <h3 class="card-title">{{ tournament.name }}</h3>
+                <p class="text-muted">{{ tournament.description[:100] }}{% if tournament.description|length > 100 %}...{% endif %}</p>
+                <div class="mt-4">
+                    <div class="row">
+                        <div class="col">
+                            <div class="text-muted">تاريخ البداية</div>
+                            <div>{{ tournament.start_date.strftime('%d/%m/%Y') }}</div>
+                        </div>
+                        <div class="col">
+                            <div class="text-muted">تاريخ النهاية</div>
+                            <div>{{ tournament.end_date.strftime('%d/%m/%Y') }}</div>
+                        </div>
+                        <div class="col-auto">
+                            <div class="text-muted">الحالة</div>
+                            <div>
+                                <span class="badge bg-{{ 'success' if tournament.status == 'جاري' else 'primary' if tournament.status == 'قادم' else 'secondary' }}">
+                                    {{ tournament.status }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <a href="{{ url_for('tournament_detail', tournament_id=tournament.id) }}" class="btn btn-outline-primary w-100">
+                    عرض التفاصيل
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="col-12">
+        <div class="empty">
+            <div class="empty-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-trophy" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 21l8 0" /><path d="M12 17l0 4" /><path d="M7 4l10 0" /><path d="M17 4v8a5 5 0 0 1 -10 0v-8" /><path d="M5 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M19 9m-2 0a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /></svg>
+            </div>
+            <p class="empty-title">لا توجد دوريات حالياً</p>
+            <p class="empty-subtitle text-muted">
+                قم بإنشاء دوري جديد ليظهر هنا
+            </p>
+            {% if current_user.is_authenticated %}
+            <div class="empty-action">
+                <a href="{{ url_for('create_tournament') }}" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                    إنشاء دوري جديد
+                </a>
+            </div>
+            {% else %}
+            <div class="empty-action">
+                <a href="{{ url_for('register') }}" class="btn btn-primary">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /></svg>
+                    إنشاء حساب جديد
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

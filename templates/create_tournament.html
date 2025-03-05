@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}إنشاء دوري جديد - بادل ليج{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <h2 class="page-title">
+                    إنشاء دوري جديد
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label required">اسم الدوري</label>
+                        <input type="text" name="name" class="form-control" placeholder="أدخل اسم الدوري" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">وصف الدوري</label>
+                        <textarea name="description" class="form-control" rows="4" placeholder="أدخل وصفاً للدوري"></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required">تاريخ البداية</label>
+                            <input type="date" name="start_date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required">تاريخ النهاية</label>
+                            <input type="date" name="end_date" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary">إنشاء الدوري</button>
+                        <a href="{{ url_for('tournaments') }}" class="btn btn-outline-secondary ms-2">إلغاء</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

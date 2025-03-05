@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}إنشاء حساب جديد - بادل ليج{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">إنشاء حساب جديد</h3>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">اسم المستخدم</label>
+                        <input type="text" name="username" class="form-control" placeholder="أدخل اسم المستخدم" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">البريد الإلكتروني</label>
+                        <input type="email" name="email" class="form-control" placeholder="أدخل البريد الإلكتروني" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">كلمة المرور</label>
+                        <input type="password" name="password" class="form-control" placeholder="أدخل كلمة المرور" required>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary w-100">إنشاء حساب</button>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                لديك حساب بالفعل؟ <a href="{{ url_for('login') }}">تسجيل الدخول</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}{{ team.name }} - بادل ليج{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    <a href="{{ url_for('tournament_detail', tournament_id=team.tournament_id) }}">{{ team.tournament.name }}</a>
+                </div>
+                <h2 class="page-title">
+                    {{ team.name }}
+                </h2>
+            </div>
+            {% if current_user.is_authenticated and current_user.id == team.tournament.user_id %}
+            <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+                    <a href="{{ url_for('add_player', team_id=team.id) }}" class="btn btn-primary d-none d-sm-inline-block">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" /><path d="M6 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M12 5l0 4" /><path d="M10 7l4 0" /></svg>
+                        إضافة لاعب
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="row row-cards">
+    <!-- قائمة اللاعبين -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">اللاعبين</h3>
+            </div>
+            <div class="card-body">
+                {% if players %}
+                <div class="table-responsive">
+                    <table class="table table-vcenter card-table">
+                        <thead>
+                            <tr>
+                                <th>الاسم</th>
+                                <th>رقم الهاتف</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for player in players %}
+                            <tr>
+                                <td>{{ player.name }}</td>
+                                <td>{{ player.phone or '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty">
+                    <div class="empty-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+                    </div>
+                    <p class="empty-title">لا يوجد لاعبين</p>
+                    <p class="empty-subtitle text-muted">
+                        لم يتم إضافة أي لاعب لهذا الفريق بعد
+                    </p>
+                    {% if current_user.is_authenticated and current_user.id == team.tournament.user_id %}
+                    <div class="empty-action">
+                        <a href="{{ url_for('add_player', team_id=team.id) }}" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                            إضافة لاعب
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- مباريات الفريق -->
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">مباريات الفريق</h3>
+            </div>
+            <div class="card-body">
+                {% if matches %}
+                <div class="list-group list-group-flush">
+                    {% for match in matches %}
+                    <a href="{{ url_for('match_detail', match_id=match.id) }}" class="list-group-item list-group-item-action">
+                        <div class="row align-items-center">
+                            <div class="col-12 mb-2">
+                                <div class="text-muted">{{ match.match_date.strftime('%d/%m/%Y %H:%M') }}</div>
+                            </div>
+                            <div class="col text-end pe-0">
+                                <span class="{{ 'fw-bold' if match.home_team_id == team.id }}">{{ match.home_team.name }}</span>
+                            </div>
+                            <div class="col-auto px-2 text-center">
+                                {% if match.status == 'منتهي' %}
+                                <span class="h3">{{ match.home_score }} - {{ match.away_score }}</span>
+                                {% else %}
+                                <span class="text-muted h4">VS</span>
+                                {% endif %}
+                            </div>
+                            <div class="col text-start ps-0">
+                                <span class="{{ 'fw-bold' if match.away_team_id == team.id }}">{{ match.away_team.name }}</span>
+                            </div>
+                            <div class="col-12 mt-2 text-end">
+                                <span class="badge bg-{{ 'success' if match.status == 'منتهي' else 'warning' if match.status == 'جاري' else 'primary' }}">
+                                    {{ match.status }}
+                                </span>
+                                {% if match.location %}
+                                <span class="text-muted ms-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-map-pin" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /><path d="M17.657 16.657l-4.243 4.243a2 2 0 0 1 -2.827 0l-4.244 -4.243a8 8 0 1 1 11.314 0z" /></svg>
+                                    {{ match.location }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </a>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="empty">
+                    <div class="empty-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-ball-tennis" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M6 5.3a9 9 0 0 1 0 13.4" /><path d="M18 5.3a9 9 0 0 0 0 13.4" /></svg>
+                    </div>
+                    <p class="empty-title">لا توجد مباريات</p>
+                    <p class="empty-subtitle text-muted">
+                        لم يتم إضافة أي مباراة لهذا الفريق بعد
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

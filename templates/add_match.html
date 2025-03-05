@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block title %}إضافة مباراة - {{ tournament.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    <a href="{{ url_for('tournament_detail', tournament_id=tournament.id) }}">{{ tournament.name }}</a>
+                </div>
+                <h2 class="page-title">
+                    إضافة مباراة جديدة
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                {% if teams|length < 2 %}
+                <div class="empty">
+                    <div class="empty-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /><path d="M21 21v-2a4 4 0 0 0 -3 -3.85" /></svg>
+                    </div>
+                    <p class="empty-title">غير كافي</p>
+                    <p class="empty-subtitle text-muted">
+                        يجب أن يكون هناك فريقين على الأقل لإضافة مباراة
+                    </p>
+                    <div class="empty-action">
+                        <a href="{{ url_for('add_team', tournament_id=tournament.id) }}" class="btn btn-primary">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                            إضافة فريق
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required">الفريق المضيف</label>
+                            <select name="home_team_id" class="form-select" required>
+                                <option value="">اختر الفريق المضيف</option>
+                                {% for team in teams %}
+                                <option value="{{ team.id }}">{{ team.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required">الفريق الضيف</label>
+                            <select name="away_team_id" class="form-select" required>
+                                <option value="">اختر الفريق الضيف</option>
+                                {% for team in teams %}
+                                <option value="{{ team.id }}">{{ team.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label required">تاريخ ووقت المباراة</label>
+                            <input type="datetime-local" name="match_date" class="form-control" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">الموقع</label>
+                            <input type="text" name="location" class="form-control" placeholder="أدخل موقع المباراة">
+                        </div>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary">إضافة المباراة</button>
+                        <a href="{{ url_for('tournament_detail', tournament_id=tournament.id) }}" class="btn btn-outline-secondary ms-2">إلغاء</a>
+                    </div>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}إضافة فريق جديد - {{ tournament.name }}{% endblock %}
+
+{% block content %}
+<div class="page-header d-print-none">
+    <div class="container-xl">
+        <div class="row g-2 align-items-center">
+            <div class="col">
+                <div class="page-pretitle">
+                    {{ tournament.name }}
+                </div>
+                <h2 class="page-title">
+                    إضافة فريق جديد
+                </h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label required">اسم الفريق</label>
+                        <input type="text" name="name" class="form-control" placeholder="أدخل اسم الفريق" required>
+                    </div>
+                    <div class="form-footer">
+                        <button type="submit" class="btn btn-primary">إضافة الفريق</button>
+                        <a href="{{ url_for('tournament_detail', tournament_id=tournament.id) }}" class="btn btn-outline-secondary ms-2">إلغاء</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
